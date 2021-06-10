@@ -1,0 +1,21 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "watch": "tsc --watch src/index.ts --outDir dist --esModuleInterop",
+    "dev": "nodemon dist/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/cors": "^2.8.10",
+    "@types/express": "^4.17.12",
+    "@types/yt-search": "^2.3.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "yt-search": "^2.8.0"
+  }
+}
