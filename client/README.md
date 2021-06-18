@@ -9,4 +9,4 @@ Libarys and Tools:
 
 In the project directory, you can run:
 
-### `yarn start`
+### `npm run start`
