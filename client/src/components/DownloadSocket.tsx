@@ -6,10 +6,16 @@ import { validateURL } from 'ytdl-core'
 
 const socket: Socket = io('http://192.168.0.27:5000')
 
+const getVideoID = (link: string) => {
+    const parsed = new URL(link);
+    const id = parsed.searchParams.get('v')
+    if(id) return id
+    return false
+}
 
-const convertURL = (data: string) => {
-    if(!data) return;
-    console.log(data)
+const convertURL = (url: string, filename: string) => {
+    const vidId = getVideoID(url)
+    document.location.href = `http://192.168.0.27:4000/api/ytdl/${vidId}?format=mp3&filename=${filename}`
 }
 
 export function YoutubeDownloaderSocket() {
@@ -77,7 +83,10 @@ export function YoutubeDownloaderSocket() {
                         }
                         )}
                     </div>
-                    <button type="button" className="convert-btn" onClick={() => convertURL(searchResult[selectedSong].url)}>Convert</button>
+                    <button type="button" className="convert-btn" onClick={() => {
+                            if(!searchResult[selectedSong]) return;
+                            convertURL(searchResult[selectedSong].url, searchResult[selectedSong].title)
+                        }}>Convert</button>
                 </div>
             </div>
         </div>

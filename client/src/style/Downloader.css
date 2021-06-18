@@ -197,12 +197,41 @@ Search Query Box
 }
 
 @media screen and (max-width: 680px) {
+  .download-box h1 {
+    font-size: 25px;
+  }
+  .download-box .short {
+    font-size: 13px;
+  }
+
+  .download-box .content {
+    margin-left: 17.5px;
+    margin-right: 17.5px;
+  }
+
+  .download-box .content .url-search {
+    margin-top: 50px;
+    min-width: inherit;
+  }
+
+  .search-item {
+    font-size: 11px;
+  }
+
+  .search-container {
+    z-index: -1;
+    width: inherit;
+  }
+
   .download-box {
     width: inherit;
     border-radius: 0;
   }
 
   .content .convert-btn {
-    max-width: 83.5%;
+    width: 80%;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
   }
 }
