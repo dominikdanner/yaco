@@ -1,9 +1,9 @@
-export interface SongResult {
-    title: string;
-    url: string;
+export interface Song {
+    title: string,
     channel: {
-        name: string;
-        url: string;
+        name: string,
+        url: string,
     },
-    thumbnail: string;
+    url: string,
+    thumbnail: string,
 }
