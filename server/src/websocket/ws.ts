@@ -16,7 +16,6 @@ export const createWebSocket = () => {
 	
 	io.on("connection", (socket: Socket) => {
 	    socket.on('search-query', (param: string) => {
-		console.time('Query')
 		let Response: SongResult | { error: Error | string };
 		if(!param) return Response = { error: 'no_param' };
 		ytsr({
@@ -54,7 +53,7 @@ export const createWebSocket = () => {
 			],
 		    }
 		    socket.emit('search-response', Response)
-		    console.timeEnd('Query')
+		    console.log('Query successful')
 		}).catch((err) => Response = { error: err });
 	    })
 	
@@ -78,6 +77,14 @@ export const createWebSocket = () => {
 			}
 			socket.emit('url-response', Response)
 		    }).catch((err) => Response = { error: err })
+	    })
+
+	    socket.on('song-download', async(vidId: string, options: DownloadOptions) => {
+		const path: string = `src/cache/${vidId}.${options.format}`
+		await ytdl(`https://www.youtube.com/watch?v=${vidId}`, { filter: 'audioonly' })
+			.pipe(fs.createWriteStream(path)).on('finish', () => {
+				socket.emit('song-ready', vidId)
+			})
 	    })
 	});
 

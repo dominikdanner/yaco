@@ -40,31 +40,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 exports.__esModule = true;
 var express_1 = __importDefault(require("express"));
-var ytdl_core_1 = __importDefault(require("ytdl-core"));
 var fs_1 = __importDefault(require("fs"));
 var router = express_1["default"].Router();
-router.get('/ytdl/:vidId', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var vidId, format, filename, path;
+router.get('/ytdl/:file', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var filename;
     return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                console.time('Convert');
-                vidId = req.params.vidId;
-                format = req.query.format;
-                filename = req.query.filename;
-                path = "src/http/cache/" + filename + "." + format;
-                return [4 /*yield*/, ytdl_core_1["default"]("https://www.youtube.com/watch?v=" + vidId, { filter: 'audioonly' })
-                        .pipe(fs_1["default"].createWriteStream(path)).on('finish', function () {
-                        setTimeout(function () {
-                            fs_1["default"].unlinkSync(path);
-                        }, 5000);
-                        res.download(path);
-                        console.timeEnd('Convert');
-                    })];
-            case 1:
-                _a.sent();
-                return [2 /*return*/];
-        }
+        filename = req.params.file;
+        res.download("src/cache/" + filename);
+        setTimeout(function () {
+            fs_1["default"].unlink(filename, function () { return console.log("Cache cleared"); });
+        }, 1000 * 1 * 10);
+        return [2 /*return*/];
     });
 }); });
 exports["default"] = router;
