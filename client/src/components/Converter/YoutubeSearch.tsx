@@ -1,5 +1,4 @@
 import { useState, useEffect, FC } from "react";
-import { validateURL } from 'ytdl-core'
 import { Socket, io } from "socket.io-client";
 import { Song } from "../../types/Song";
 import { getVideoID } from "../util/url";
@@ -36,6 +35,15 @@ const convertURL = (song: Song) => {
     document.location.href = "/download"
 }
 
+function validateURL(str: string) {
+  var pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
+    '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name
+    '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
+    '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
+    '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
+    '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
+  return !!pattern.test(str);
+}
 
 export const YoutubeSearch: FC<Props> = ({ loading, noResult }) => {    
     const [query, setQuery] = useState<string>('');
@@ -54,6 +62,7 @@ export const YoutubeSearch: FC<Props> = ({ loading, noResult }) => {
         // Validates Query or Link and gets the Search Result
         else if(!validateURL(query)) {
             const timer = setTimeout(() => {
+                console.log("No URL")
                 socket.emit('search-query', query)
                 console.time('WS')
                 socket.once('search-response', (songRes: { search: any[] }) => {
@@ -69,6 +78,7 @@ export const YoutubeSearch: FC<Props> = ({ loading, noResult }) => {
             return () => clearTimeout(timer);
         } else {
             const timer = setTimeout(() => {
+                console.log("URL")
                 socket.emit('url-query', query)
                 console.time('Socket Response-Time')
                 socket.once('url-response', (searchRes: any) => {
