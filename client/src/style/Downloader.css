@@ -60,16 +60,16 @@
 .content .download-btn {
   position: absolute;
   bottom: 0;
+  width: 83.5%;
   margin-bottom: 35px;
   height: 50px;
   border: none;
   background-color: var(--color-primary-300);
   color: var(--color-button-text);
-  border-radius: 10px;
   font-weight: 800;
+  border-radius: 10px;
+  transition: 0.2s ease-in-out;
   font-size: 14px;
-  width: 83.5%;
-  transition: 0.2s ease;
 }
 
 .content .download-btn:hover {
@@ -100,8 +100,8 @@
   top: 0;
   left: 50%;
   transform: translate(-50%);
-  width: 700px;
-  height: 200px;
+  width: 600px;
+  height: 210px;
   background-color: var(--color-primary-700);
   border: none;
   border-bottom-left-radius: 10px;
@@ -117,7 +117,7 @@
   top: 0;
   left: 50%;
   transform: translate(-50%);
-  width: 700px;
+  width: 600px;
   height: 200px;
   background-color: var(--color-primary-700);
   border: none;
@@ -135,10 +135,17 @@
 }
 
 .options-container select {
-  border-radius: 5px;
+  font-weight: 500;
+  border-top-left-radius: 7px;
+  border-top-right-radius: 7px;
   outline: none;
   height: 25px;
   width: 100px;
+}
+
+.options-container select option {
+  font-weight: 500;
+  outline: none;
 }
 
 @keyframes toogleOn {
@@ -160,5 +167,26 @@
   to {
     margin-top: -300px;
     opacity: 0%;
+  }
+}
+
+@media screen and (max-width: 680px) {
+  .popup-on {
+    width: 100%;
+  }
+
+  .popup-off {
+    width: 100%;
+  }
+
+  .options-container select {
+    width: 140px;
+  }
+
+  .content .download-btn {
+    width: 93%;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%);
   }
 }

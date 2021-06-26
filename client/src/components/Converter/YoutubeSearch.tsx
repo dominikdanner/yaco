@@ -2,7 +2,6 @@ import { useState, useEffect, FC } from "react";
 import { Socket, io } from "socket.io-client";
 import { Song } from "../../types/Song";
 import { getVideoID, validateURL } from "../util/url";
-import { DownloadOptions } from "../../types/DownloadOptions";
 
 interface Props {
 	loading: string;
@@ -17,14 +16,9 @@ const socket: Socket = io('http://192.168.0.27:5000')
  */
 const convertURL = (song: Song) => {
     const vidId = getVideoID(song.url)
-    const options: DownloadOptions = {
-        format: 'mp3',
-        filename: song.title,
-    }
 
     // Set items for Local Storage for sharing
-    localStorage.setItem('filename', options.filename)
-    localStorage.setItem('format', options.format)
+    localStorage.setItem('filename', song.title)
     localStorage.setItem('videoId', vidId)
     localStorage.setItem('thumbnail', song.thumbnail)
     localStorage.setItem('author', song.channel.name)

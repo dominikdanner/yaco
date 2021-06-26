@@ -81,9 +81,7 @@ export const ConverterOptions: FC = () => {
 			<div style={{display:"none"}} id="popup-options">
 				<div className="options-container">
 					<select onChange={(e) => setFormat(e.target.value)}>
-						{formatSelector.map((item: { label: string, value: string }, itemIdx: number) => 
-							<option key={itemIdx} value={item.value}>{item.label}</option>
-						)}
+						{formatSelector.map((item: { label: string, value: string }, itemIdx: number) => <option key={itemIdx} value={item.value}>{item.label}</option>)}
 					</select>
 				</div>
 			</div>
