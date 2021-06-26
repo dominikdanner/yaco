@@ -25,11 +25,12 @@
     "express": "^4.17.1",
     "ffmpeg": "^0.0.4",
     "fluent-ffmpeg": "^2.1.2",
+    "miniget": "^4.2.1",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
     "socket.io": "^4.1.2",
     "socket.io-client": "^4.1.2",
     "yt-search": "^2.8.0",
-    "ytdl-core": "^4.8.2"
+    "ytdl-core": "^4.8.3"
   }
 }

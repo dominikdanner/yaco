@@ -1,7 +1,7 @@
 import { useState, useEffect, FC } from "react";
 import { Socket, io } from "socket.io-client";
 import { Song } from "../../types/Song";
-import { getVideoID } from "../util/url";
+import { getVideoID, validateURL } from "../util/url";
 import { DownloadOptions } from "../../types/DownloadOptions";
 
 interface Props {
@@ -20,10 +20,7 @@ const convertURL = (song: Song) => {
     const options: DownloadOptions = {
         format: 'mp3',
         filename: song.title,
-}
-
-    // Caching the song in mp3 for faster downloads
-    // socket.emit('cache-download', vidId, options)
+    }
 
     // Set items for Local Storage for sharing
     localStorage.setItem('filename', options.filename)
@@ -33,16 +30,6 @@ const convertURL = (song: Song) => {
     localStorage.setItem('author', song.channel.name)
     localStorage.setItem('authorURL', song.channel.url)
     document.location.href = "/download"
-}
-
-function validateURL(str: string) {
-  var pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
-    '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name
-    '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
-    '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
-    '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
-    '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
-  return !!pattern.test(str);
 }
 
 export const YoutubeSearch: FC<Props> = ({ loading, noResult }) => {    
@@ -62,35 +49,27 @@ export const YoutubeSearch: FC<Props> = ({ loading, noResult }) => {
         // Validates Query or Link and gets the Search Result
         else if(!validateURL(query)) {
             const timer = setTimeout(() => {
-                console.log("No URL")
-                socket.emit('search-query', query)
-                console.time('WS')
-                socket.once('search-response', (songRes: { search: any[] }) => {
+                socket.emit('string-query', { param: query, maxResult: 3 }).once('string-query-response', (songRes: { search: any[] }) => {
                     // Reset all States
                     setSong(-1)
                     setLoad(false);
                     // Set Search Result
                     setSearchResult(songRes.search)
-                    console.timeEnd('WS')
-                });
+                })
             }, 1000)
-            
+                       
             return () => clearTimeout(timer);
         } else {
             const timer = setTimeout(() => {
-                console.log("URL")
-                socket.emit('url-query', query)
-                console.time('Socket Response-Time')
-                socket.once('url-response', (searchRes: any) => {
+                socket.emit('url-query', query).once('url-response', (searchRes: any) => {
                     // Reset Selected Song State
                     setSong(-1)
                     setLoad(false)
                     // Set Search Result
                     setSearchResult(searchRes.search)
-                    console.timeEnd('Socket Response-Time')
-                });
+                })
             }, 1000)
-            
+                
             return () => clearTimeout(timer);
         }
     }, [query])

@@ -53,47 +53,37 @@ var createWebSocket = function () {
         }
     });
     io.on("connection", function (socket) {
-        socket.on('search-query', function (param) {
-            var Response;
-            if (!param)
-                return Response = { error: 'no_param' };
-            yt_search_1["default"]({
-                query: param
-            }).then(function (data) {
-                Response = {
-                    search: [
-                        {
-                            title: data.videos[0].title,
-                            url: data.videos[0].url,
-                            thumbnail: data.videos[0].thumbnail,
-                            channel: {
-                                name: data.videos[0].author.name,
-                                url: data.videos[0].author.url
-                            }
-                        },
-                        {
-                            title: data.videos[1].title,
-                            url: data.videos[1].url,
-                            thumbnail: data.videos[1].thumbnail,
-                            channel: {
-                                name: data.videos[1].author.name,
-                                url: data.videos[1].author.url
-                            }
-                        },
-                        {
-                            title: data.videos[2].title,
-                            url: data.videos[2].url,
-                            thumbnail: data.videos[2].thumbnail,
-                            channel: {
-                                name: data.videos[2].author.name,
-                                url: data.videos[2].author.url
-                            }
-                        }
-                    ]
-                };
-                socket.emit('search-response', Response);
-                console.log('Query successful');
-            })["catch"](function (err) { return Response = { error: err }; });
+        socket.on('string-query', function (_a) {
+            var param = _a.param, maxResult = _a.maxResult;
+            return __awaiter(void 0, void 0, void 0, function () {
+                var Response;
+                return __generator(this, function (_b) {
+                    switch (_b.label) {
+                        case 0:
+                            Response = { search: [] };
+                            if (!param)
+                                return [2 /*return*/, socket.emit('error', { error: 'no_param' })];
+                            return [4 /*yield*/, yt_search_1["default"]({ query: param })
+                                    .then(function (data) {
+                                    for (var i = 0; i < maxResult; i++) {
+                                        Response.search[i] = {
+                                            title: data.videos[i].title,
+                                            url: data.videos[i].url,
+                                            thumbnail: data.videos[i].thumbnail,
+                                            channel: {
+                                                name: data.videos[i].author.name,
+                                                url: data.videos[i].author.url
+                                            }
+                                        };
+                                    }
+                                    socket.emit('string-query-response', Response);
+                                })["catch"](function (err) { return socket.emit('error', { error: err }); })];
+                        case 1:
+                            _b.sent();
+                            return [2 /*return*/];
+                    }
+                });
+            });
         });
         socket.on('url-query', function (url) {
             var Response;
@@ -106,33 +96,24 @@ var createWebSocket = function () {
                         {
                             title: data.videoDetails.title,
                             url: url,
+                            thumbnail: data.videoDetails.thumbnails[0].url,
                             channel: {
                                 name: data.videoDetails.ownerChannelName,
                                 url: data.videoDetails.author.channel_url
-                            },
-                            thumbnail: data.videoDetails.thumbnails[0].url
+                            }
                         }
                     ]
                 };
                 socket.emit('url-response', Response);
-            })["catch"](function (err) { return Response = { error: err }; });
+            })["catch"](function (err) { return socket.emit('error', { error: err }); });
         });
-        socket.on('song-download', function (vidId, options) { return __awaiter(void 0, void 0, void 0, function () {
-            var path;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        path = "src/cache/" + vidId + "." + options.format;
-                        return [4 /*yield*/, ytdl_core_1["default"]("https://www.youtube.com/watch?v=" + vidId, { filter: 'audioonly' })
-                                .pipe(fs_1["default"].createWriteStream(path)).on('finish', function () {
-                                socket.emit('song-ready', vidId);
-                            })];
-                    case 1:
-                        _a.sent();
-                        return [2 /*return*/];
-                }
-            });
-        }); });
+        socket.on('song-download', function (vidId, options) {
+            var path = "src/cache/" + options.filename + "." + options.format;
+            ytdl_core_1["default"]("https://www.youtube.com/watch?v=" + vidId, { filter: 'audioonly' })
+                .on('error', function (err) { return socket.emit('error', { error: err }); })
+                .pipe(fs_1["default"].createWriteStream(path))
+                .on('finish', function () { return socket.emit('song-ready', vidId); });
+        });
     });
     httpServer.listen(5000, function () {
         console.log("WebSocket Running");

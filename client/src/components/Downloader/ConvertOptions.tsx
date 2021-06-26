@@ -5,6 +5,8 @@ import { DownloadOptions } from '../../types/DownloadOptions'
 
 const socket: Socket = io('http://192.168.0.27:5000')
 
+socket.on('error', (err: { error: any }) => console.log(err.error))
+
 const getLocalStorageSong = () => {
 	return {
 		filename: localStorage.getItem('filename'),
@@ -25,51 +27,64 @@ const requestDownload = (vidId: string, title: string, format: string) => {
 	socket.emit('song-download', vidId, options)
 	socket.once('song-ready', (id: string) => {
 		console.log(`Exepted ID: ${id}`)
-		document.location.href = `http://localhost:4000/api/ytdl/${id}.${options.format}`
+		document.location.href = `http://192.168.27:4000/api/ytdl/${options.filename}.${options.format}`
 	})
 }
 
 export const ConverterOptions: FC = () => {
-	const [state, setState] = useState(false)
+	const [state, setState] = useState<boolean>(false)
+	const [format, setFormat] = useState<string>('mp3')
 	const Song = getLocalStorageSong()
 
+	const formatSelector = [
+		{
+			label: "MP3",
+			value: "mp3"
+		},
+				{
+			label: "WAV",
+			value: "wav"
+		}
+	]
+
 	return(
-		<div className="container">
-			<div className="download-box">
-				<h1><span>Youtube</span> Video Converter</h1>
-				<p className="short">Download Music and Video in your format</p>
-				<div className="content">
-					<div className="video-card">
-						<a href={`https://www.youtube.com/watch?v=${Song.videoId}`} target="_blank" rel="noreferrer"><img src={Song.thumbnail} alt="thumbnail"></img></a>
-						<div className="video-details">
-							<h4>{Song.filename}</h4>
-							<p>{Song.author}</p>
-							<button className="options-btn" onClick={() => {
-								const el = document.getElementById('popup-options')
-								el.style.display = "block"
-								if(state) {
-									el.classList.remove('popup-on')
-									el.classList.add('popup-off')
-									setState(false)
-								} else {
-									setState(true)
-									el.classList.remove('popup-off')
-									el.classList.add('popup-on')
-								}
-							}}>Options</button>
+		<div>
+			<div className="container">
+				<div className="download-box">
+					<h1><span>Youtube</span> Video Converter</h1>
+					<p className="short">Download Music and Video in your format</p>
+					<div className="content">
+						<div className="video-card">
+							<a href={`https://www.youtube.com/watch?v=${Song.videoId}`} target="_blank" rel="noreferrer"><img src={Song.thumbnail} alt="thumbnail"></img></a>
+							<div className="video-details">
+								<h4>{Song.filename}</h4>
+								<p>{Song.author}</p>
+								<button className="options-btn" onClick={() => {
+									const el = document.getElementById('popup-options')
+									el.style.display = "block"
+									if(state) {
+										el.classList.remove('popup-on')
+										el.classList.add('popup-off')
+										setState(false)
+									} else {
+										setState(true)
+										el.classList.remove('popup-off')
+										el.classList.add('popup-on')
+									}
+								}}>Options</button>
+							</div>
 						</div>
+						<button className="download-btn" onClick={() => requestDownload(Song.videoId, Song.filename, format)}>Download</button>
 					</div>
-					<button className="download-btn" onClick={() => requestDownload(Song.videoId, Song.filename, 'mp3')}>Download</button>
 				</div>
-				<div style={{display:"none"}} id="popup-options">
-					<div className="options-container">
-						<select>
-							<option>MP3</option>
-							<option>MP4</option>
-							<option>WAV</option>
-							<option>AVI</option>
-						</select>
-					</div>
+			</div>
+			<div style={{display:"none"}} id="popup-options">
+				<div className="options-container">
+					<select onChange={(e) => setFormat(e.target.value)}>
+						{formatSelector.map((item: { label: string, value: string }, itemIdx: number) => 
+							<option key={itemIdx} value={item.value}>{item.label}</option>
+						)}
+					</select>
 				</div>
 			</div>
 		</div>

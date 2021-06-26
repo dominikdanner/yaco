@@ -43,13 +43,11 @@ var express_1 = __importDefault(require("express"));
 var fs_1 = __importDefault(require("fs"));
 var router = express_1["default"].Router();
 router.get('/ytdl/:file', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var filename;
+    var path;
     return __generator(this, function (_a) {
-        filename = req.params.file;
-        res.download("src/cache/" + filename);
-        setTimeout(function () {
-            fs_1["default"].unlink(filename, function () { return console.log("Cache cleared"); });
-        }, 1000 * 1 * 10);
+        path = "src/cache/" + req.params.file;
+        res.download(path);
+        fs_1["default"].rm(path, function (_) { return console.info("Cache Service"); });
         return [2 /*return*/];
     });
 }); });

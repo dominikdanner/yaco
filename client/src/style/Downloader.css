@@ -96,33 +96,31 @@
 }
 
 .popup-on {
-  z-index: 1;
   position: absolute;
   top: 0;
   left: 50%;
-  transform: translate(-50%, -50%);
-  width: 600px;
-  height: 130px;
+  transform: translate(-50%);
+  width: 700px;
+  height: 200px;
   background-color: var(--color-primary-700);
-  padding: 50px;
+  border: none;
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
 
   animation: toogleOn;
-  animation-duration: 0.7s;
+  animation-duration: 0.5s;
   animation-fill-mode: forwards;
 }
 
 .popup-off {
-  z-index: 1;
   position: absolute;
   top: 0;
   left: 50%;
-  transform: translate(-50%, -50%);
-  width: 600px;
-  height: 130px;
+  transform: translate(-50%);
+  width: 700px;
+  height: 200px;
   background-color: var(--color-primary-700);
-  padding: 50px;
+  border: none;
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
 
@@ -133,19 +131,14 @@
 
 .options-container {
   z-index: 2;
+  margin: 30px;
 }
 
 .options-container select {
-  font-weight: 700;
+  border-radius: 5px;
   outline: none;
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
-  border: none;
-  height: 30px;
-  width: 20%;
-  background-color: var(--color-primary-400);
-  color: white;
-  font-size: 15px;
+  height: 25px;
+  width: 100px;
 }
 
 @keyframes toogleOn {

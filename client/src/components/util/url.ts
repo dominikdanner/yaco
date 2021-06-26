@@ -10,4 +10,19 @@ const getVideoID = (link: string): string => {
     return id
 }
 
-export { getVideoID }
+/**
+ * Checks if its a url or not
+ * @param str 
+ * @returns 
+ */
+const validateURL = (str: string) => {
+  var pattern = new RegExp('^(https?:\\/\\/)?'+ // Protocol
+    '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // Domain
+    '((\\d{1,3}\\.){3}\\d{1,3}))'+ // IP v4
+    '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // Port and Path
+    '(\\?[;&a-z\\d%_.~+=-]*)?'+ // Query Strings
+    '(\\#[-a-z\\d_]*)?$','i'); // Fragment Locator
+  return !!pattern.test(str);
+}
+
+export { getVideoID, validateURL }
