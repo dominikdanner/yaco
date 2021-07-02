@@ -97,7 +97,7 @@
 
 .popup-on {
   position: absolute;
-  top: 0;
+  top: 0px;
   left: 50%;
   transform: translate(-50%);
   width: 600px;
@@ -112,17 +112,32 @@
   animation-fill-mode: forwards;
 }
 
-.popup-off {
+.popup-on {
   position: absolute;
-  top: 0;
+  top: 0px;
   left: 50%;
   transform: translate(-50%);
   width: 600px;
-  height: 200px;
+  height: 210px;
   background-color: var(--color-primary-700);
   border: none;
-  border-bottom-left-radius: 10px;
-  border-bottom-right-radius: 10px;
+  border-radius: 10px;
+
+  animation: toogleOn;
+  animation-duration: 0.5s;
+  animation-fill-mode: forwards;
+}
+
+.popup-off {
+  position: absolute;
+  top: 0px;
+  left: 50%;
+  transform: translate(-50%);
+  width: 600px;
+  height: 210px;
+  background-color: var(--color-primary-700);
+  border: none;
+  border-radius: 10px;
 
   animation: toogleOff;
   animation-duration: 0.7s;

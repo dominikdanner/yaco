@@ -26,7 +26,7 @@ const convertURL = (song: Song) => {
     document.location.href = "/download"
 }
 
-export const YoutubeSearch: FC<Props> = ({ loading, noResult }) => {    
+export const YoutubeSearch: FC<Props> = ({ loading, noResult }) => {
     const [query, setQuery] = useState<string>('');
     const [selectedSong, setSong] = useState<number>(-1);
     const [load, setLoad] = useState<boolean>(false);
