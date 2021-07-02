@@ -1,7 +1,22 @@
 {
-	"scripts": {
-		"server": "cd server && npm run dev",
-		"client": "cd client && npm run start",
-		"app": "cd app && npm run start"
-	}
+  "name": "youtube-converter",
+  "version": "1.0.0",
+  "description": "## Available Scripts",
+  "main": "index.js",
+  "scripts": {
+    "client" : "cd client && npm run start",
+    "app" : "cd app && npm run start",
+    "server" : "cd server && npm run start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dominikdanner/youtube-video-converter.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dominikdanner/youtube-video-converter/issues"
+  },
+  "homepage": "https://github.com/dominikdanner/youtube-video-converter#readme"
 }
