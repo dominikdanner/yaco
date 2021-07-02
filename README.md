@@ -2,6 +2,8 @@
 
 ## Available Scripts
 
+First install all Dependecies by going into the directory and run `npm install`
+
 In the project directory, you can run:
 
 ### `npm run server`
